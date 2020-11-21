@@ -55,11 +55,11 @@ if __name__ == "__main__":
   print("Start")
   with open('../access.log') as f:
       f.readlines()
-      print("Going to sleep 20s")
-      time.sleep(20)
+      #print("Going to sleep 20s")
+      #time.sleep(20)
       try:
           resetTimer = time.time() + (3 *60)
-          print("Starting reset timer %d" %(resetTimer))
+          #print("Starting reset timer %d" %(resetTimer))
           streams = {}
 
           for i in myfile(f):
@@ -79,7 +79,7 @@ if __name__ == "__main__":
                       streams[path] = [l.clientIP]
 
               else:
-                  print(time.time())
+                  #print(time.time())
                   print("---")
                   time.sleep(10)
 
