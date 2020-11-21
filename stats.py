@@ -16,9 +16,6 @@ class logEntry:
 
         return False
 
-    def __str__(self):
-        return "My IP is " + self.clientIP + " and stream path is " + self.stream
-
 
 def myfile(thefile):
     while True:
@@ -40,7 +37,7 @@ def validLogEntry(str):
     if ("GET" in str and ".m3u8" in str
             and "HTTP/1.1" in str):
         return True
-    print("String is not valid: %s" % (str.strip()))
+    #print("String is not valid: %s" % (str.strip()))
     return False
 
 
@@ -58,10 +55,10 @@ if __name__ == "__main__":
   print("Start")
   with open('../access.log') as f:
       f.readlines()
-      print("Going to sleep 10s")
-      time.sleep(10)
+      print("Going to sleep 20s")
+      time.sleep(20)
       try:
-          resetTimer = time.time() + (5 * 60)
+          resetTimer = time.time() + (3 *60)
           print("Starting reset timer %d" %(resetTimer))
           streams = {}
 
@@ -75,42 +72,27 @@ if __name__ == "__main__":
 
                   if path in streams.keys():
                       streamClients = streams[path]
-                      print("IP is %s" %(ip))
-                      print(client.clientIP == ip for client in streamClients)
-                      if  (client.clientIP == ip for client in streamClients):
-                          print("IP is %s" %(ip))
-                          print(streamClients)
-                          streamClients.append(l)
+                      if ip not in streamClients:
+                          streamClients.append(l.clientIP)
                           streams[path] = streamClients
                   else:
-                      streams[path] = [l]
+                      streams[path] = [l.clientIP]
 
               else:
-                  #print(time.time())
+                  print(time.time())
                   print("---")
                   time.sleep(10)
 
               for x in streams.keys():
-                  if len(streams[x]) != 0:
-                      print("%s has %d viewers" % (x,len(streams[x])))
-
-                  mylist =mylist = []
-                  for client in streams[x]:
-
-                      if resetTimer - client.time >= 300:
-                          print("removing")
-                          continue
-                      mylist.append(client)
-                  print(mylist[0])
-                  streams[x] = mylist
-
+                  print("%s has %d viewers" % (x,len(streams[x])))
 
               if resetTimer < time.time():
-                  resetTimer = time.time() + (5 *60)
-                  #streams = {}
+                  resetTimer = time.time() + (1 *60)
+                  streams = {}
                   print("Timer reset")
 
 
       except KeyboardInterrupt as e:
             f.close()
             print("Closing the log File")
+
