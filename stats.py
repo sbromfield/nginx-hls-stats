@@ -16,6 +16,14 @@ class logEntry:
 
         return False
 
+    def __eq__(self, p):
+        if not isinstance(p,str):
+            return False
+
+        if self.clientIP == p:
+            return True
+        else:
+            return False
 
 def myfile(thefile):
     while True:
@@ -52,14 +60,14 @@ def getHLSPath(str):
 
 if __name__ == "__main__":
 
+  numofmins = 3
+
   print("Start")
   with open('../access.log') as f:
       f.readlines()
-      #print("Going to sleep 20s")
-      #time.sleep(20)
+
       try:
-          resetTimer = time.time() + (3 *60)
-          #print("Starting reset timer %d" %(resetTimer))
+          resetTimer = time.time() + (numofmins * 60)
           streams = {}
 
           for i in myfile(f):
@@ -73,26 +81,36 @@ if __name__ == "__main__":
                   if path in streams.keys():
                       streamClients = streams[path]
                       if ip not in streamClients:
-                          streamClients.append(l.clientIP)
+                          streamClients.append(l)
                           streams[path] = streamClients
                   else:
-                      streams[path] = [l.clientIP]
-
+                      streams[path] = [l]
               else:
-                  #print(time.time())
                   print("---")
                   time.sleep(10)
 
               for x in streams.keys():
-                  print("%s has %d viewers" % (x,len(streams[x])))
+                  numofviewers = len(streams[x])
+                  if numofviewers > 0:
+                      print("%s has %d viewers" % (x,numofviewers))
+                  idx = -1
+                  for viewer in streams[x]:
+                      if viewer.time - resetTimer <= -(numofmins * 60):
+                          idx += 1
+                          print("Found an expired viewer %d" % idx)
+                      else:
+                          print("No more expired users in this stream")
+                          break
+                  if idx > -1:
+                      if idx + 1 == len(streams[x]):
+                          streams[x] = []
+                      else:
+                          streams[x] = streams[x][idx + 1:]
 
               if resetTimer < time.time():
-                  resetTimer = time.time() + (1 *60)
-                  streams = {}
+                  resetTimer = time.time() + (numofmins * 60)
                   print("Timer reset")
-
 
       except KeyboardInterrupt as e:
             f.close()
             print("Closing the log File")
-
