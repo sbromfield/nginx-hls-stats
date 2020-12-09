@@ -1,2 +1,0 @@
-10.111.60.240 - - [20/Nov/2020:21:14:20 -0500] "GET /live/test.stream.m3u8 HTTP/1.1" 304 0 "http://theloop.fiu.edu/" "Mozilla/5.0 (Windows NT 6.2; WOW64; Trident/7.0; rv:11.0) like Gecko"
-10.111.60.241 - - [20/Nov/2020:21:14:20 -0500] "GET /live/test.stream.m3u8 HTTP/1.1" 304 0 "http://theloop.fiu.edu/" "Mozilla/5.0 (Windows NT 6.2; WOW64; Trident/7.0; rv:11.0) like Gecko"

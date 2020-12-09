@@ -1,5 +1,6 @@
 import time
 import re
+import argparse
 
 
 class logEntry:
@@ -60,10 +61,16 @@ def getHLSPath(str):
 
 if __name__ == "__main__":
 
-  numofmins = 3
+  parser = argparse.ArgumentParser(description='Find HLS views from nginx from the rtmp module.')
+  parser.add_argument('--timeout', metavar='-m', nargs='?', type=int, help='Time out in minutes', default=3)
+  parser.add_argument('--path', metavar='-p', nargs='?', help='Path to nginx access log', default="/var/log/nginx/access.log")
+  args = parser.parse_args()
+
+  numofmins = args.timeout
+  logpath = args.path
 
   print("Start")
-  with open('../access.log') as f:
+  with open(logpath) as f:
       f.readlines()
 
       try:
@@ -97,9 +104,9 @@ if __name__ == "__main__":
                   for viewer in streams[x]:
                       if viewer.time - resetTimer <= -(numofmins * 60):
                           idx += 1
-                          print("Found an expired viewer %d" % idx)
+                          #print("Found an expired viewer %d" % idx)
                       else:
-                          print("No more expired users in this stream")
+                          #print("No more expired users in this stream")
                           break
                   if idx > -1:
                       if idx + 1 == len(streams[x]):
@@ -109,7 +116,7 @@ if __name__ == "__main__":
 
               if resetTimer < time.time():
                   resetTimer = time.time() + (numofmins * 60)
-                  print("Timer reset")
+                  #print("Timer reset")
 
       except KeyboardInterrupt as e:
             f.close()
